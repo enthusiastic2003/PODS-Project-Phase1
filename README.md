@@ -63,17 +63,25 @@ This project follows a microservices architecture with three independent service
 - Maven
 - Docker
 
-### Steps to Run
+### Steps to Build and Run
 1. Clone the repository:
    ```sh
    git clone https://github.com/your-repo/online-marketplace.git
    cd online-marketplace
    ```
-2. Build and run services using Docker:
+2. Build the project using Maven:
    ```sh
-   docker-compose up --build
+   mvn clean package
    ```
-3. Access the services at:
+3. Build the Docker image:
+   ```sh
+   docker build -t pods-app .
+   ```
+4. Run the container:
+   ```sh
+   docker run -p 8080:8080 pods-app
+   ```
+5. Access the service at:
    - Account Service: `http://localhost:8080`
    - Marketplace Service: `http://localhost:8081`
    - Wallet Service: `http://localhost:8082`
