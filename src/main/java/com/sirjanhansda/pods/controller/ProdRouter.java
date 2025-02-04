@@ -2,6 +2,7 @@ package com.sirjanhansda.pods.controller;
 
 import com.sirjanhansda.pods.model.Product;
 import com.sirjanhansda.pods.proddb.ProdDb;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProdRouter {
 
+    @Autowired
     private ProdDb prodDb;
 
     @GetMapping

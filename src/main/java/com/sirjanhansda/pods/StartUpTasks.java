@@ -1,24 +1,24 @@
 package com.sirjanhansda.pods;
 
-import com.sirjanhansda.pods.model.Product;
-import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class StartUpTasks {
 
-    private final CSVProdReader csvProdReader = new CSVProdReader();
+    @Autowired
+    private CSVProdReader csvProdReader;
 
     @PostConstruct
     public void init() {
-        Boolean TransactionStatus = csvProdReader.loadProductsFromCsv("products.csv");
+        Boolean transactionStatus = csvProdReader.loadProductsFromCsv("products.csv");
 
-        if(!TransactionStatus) {
+        if(!transactionStatus) {
             System.out.println("No products were found in CSV/ Read Error");
         }
+        else {
+            System.out.println("Successfully read products from CSV");
+        }
     }
-
 }
