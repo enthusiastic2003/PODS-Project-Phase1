@@ -18,7 +18,7 @@ public class ProdRouter {
     @Autowired
     private ProdDb prodDb;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<?> getProducts() {
 
         return ResponseEntity.ok(prodDb.findAll());

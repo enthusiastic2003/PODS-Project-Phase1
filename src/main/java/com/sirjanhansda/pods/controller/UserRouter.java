@@ -46,4 +46,58 @@ public class UserRouter {
 
         return ResponseEntity.ok(customerLists.get(0));
     }
+
+    @PutMapping("/{usrid}")
+    public ResponseEntity<?> updateUserDiscountStatus(@RequestBody final Integer usrid, @PathVariable final Boolean discountStatus) {
+        List<Customer> customerLists = userDb.findCustomerById(usrid);
+        if (customerLists.isEmpty()) {
+            return ResponseEntity.notFound().build();
+
+        }
+        else {
+            Customer customer = customerLists.get(0);
+            customer.setDiscount_availed(discountStatus);
+            try {
+                userDb.save(customer);
+            }
+            catch (Exception e) {
+                return ResponseEntity.internalServerError().body(e.getMessage());
+            }
+
+            return ResponseEntity.ok().build();
+        }
+
+    }
+
+    @DeleteMapping("/{usrid}")
+    public ResponseEntity<?> deleteUser(@PathVariable final Integer usrid) {
+        List<Customer> customerLists = userDb.findCustomerById(usrid);
+        if (customerLists.isEmpty()) {
+
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            Customer customer = customerLists.get(0);
+
+            try {
+                userDb.delete(customer);
+            }
+            catch (Exception e) {
+                return ResponseEntity.internalServerError().body(e.getMessage());
+            }
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    public ResponseEntity<?> deleteAllUsers() {
+        try {
+            userDb.deleteAll();
+        }
+        catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
+
