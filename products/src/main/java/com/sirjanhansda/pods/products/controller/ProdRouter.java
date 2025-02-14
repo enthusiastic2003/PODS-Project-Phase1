@@ -1,7 +1,7 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.products.controller;
 
-import com.sirjanhansda.pods.model.Product;
-import com.sirjanhansda.pods.proddb.ProdDb;
+import com.sirjanhansda.pods.products.model.Product;
+import com.sirjanhansda.pods.products.proddb.ProdDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

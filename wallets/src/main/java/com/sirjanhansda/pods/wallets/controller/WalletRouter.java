@@ -1,7 +1,7 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.wallets.controller;
 
-import com.sirjanhansda.pods.model.UsrWallet;
-import com.sirjanhansda.pods.walletdb.WalletDb;
+import com.sirjanhansda.pods.wallets.model.UsrWallet;
+import com.sirjanhansda.pods.wallets.walletdb.WalletDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

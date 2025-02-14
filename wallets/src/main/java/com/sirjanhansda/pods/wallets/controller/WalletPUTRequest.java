@@ -1,4 +1,4 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.wallets.controller;
 
 import jakarta.persistence.Enumerated;
 

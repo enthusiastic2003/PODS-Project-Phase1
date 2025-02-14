@@ -1,4 +1,4 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.products.controller;
 
 import lombok.Getter;
 import lombok.Setter;

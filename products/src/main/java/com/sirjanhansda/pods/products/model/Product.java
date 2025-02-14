@@ -1,4 +1,4 @@
-package com.sirjanhansda.pods.model;
+package com.sirjanhansda.pods.products.model;
 
 import jakarta.persistence.Entity;
 

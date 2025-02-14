@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@SpringBootApplication(scanBasePackages = "com.sirjanhansda.pods")
-public class PodsApplication {
+@SpringBootApplication(scanBasePackages = "com.sirjanhansda.pods.wallets")
+public class WalletsApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(PodsApplication.class, args);
+		SpringApplication.run(WalletsApplication.class, args);
 	}
 
 }

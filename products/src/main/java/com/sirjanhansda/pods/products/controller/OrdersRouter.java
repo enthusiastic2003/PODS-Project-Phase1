@@ -1,16 +1,14 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.products.controller;
 
 
-import com.sirjanhansda.pods.model.Customer;
-import com.sirjanhansda.pods.model.Product;
-import com.sirjanhansda.pods.model.UsrWallet;
-import com.sirjanhansda.pods.orderdb.OrdersDb;
-import com.sirjanhansda.pods.proddb.ProdDb;
-import org.apache.commons.lang3.ObjectUtils;
+import com.sirjanhansda.pods.products.model.Customer;
+import com.sirjanhansda.pods.products.model.Product;
+import com.sirjanhansda.pods.products.model.UsrWallet;
+import com.sirjanhansda.pods.products.orderdb.OrdersDb;
+import com.sirjanhansda.pods.products.proddb.ProdDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -95,13 +93,6 @@ public class OrdersRouter {
         }
 
 
-        try {
-
-            RequestEntity
-
-        }
-
-
-
+        return ResponseEntity.ok(usrWallet);
     }
 }

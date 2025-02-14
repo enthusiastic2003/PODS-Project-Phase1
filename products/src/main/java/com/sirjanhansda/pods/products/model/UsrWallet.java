@@ -1,4 +1,4 @@
-package com.sirjanhansda.pods.wallets.model;
+package com.sirjanhansda.pods.products.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

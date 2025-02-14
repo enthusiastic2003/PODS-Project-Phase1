@@ -1,7 +1,7 @@
-package com.sirjanhansda.pods.orderdb;
+package com.sirjanhansda.pods.products.orderdb;
 
-import com.sirjanhansda.pods.model.OrderStatus;
-import com.sirjanhansda.pods.model.Orders;
+import com.sirjanhansda.pods.products.model.OrderStatus;
+import com.sirjanhansda.pods.products.model.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

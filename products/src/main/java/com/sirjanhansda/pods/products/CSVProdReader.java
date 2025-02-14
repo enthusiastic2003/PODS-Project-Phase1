@@ -1,8 +1,8 @@
-package com.sirjanhansda.pods;
+package com.sirjanhansda.pods.products;
 
 import com.opencsv.CSVReader;
-import com.sirjanhansda.pods.model.Product;
-import com.sirjanhansda.pods.proddb.ProdDb;
+import com.sirjanhansda.pods.products.model.*;
+import com.sirjanhansda.pods.products.proddb.ProdDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

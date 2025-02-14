@@ -1,10 +1,10 @@
-package com.sirjanhansda.pods.walletdb;
+package com.sirjanhansda.pods.wallets.walletdb;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.sirjanhansda.pods.model.UsrWallet;
+import com.sirjanhansda.pods.wallets.model.UsrWallet;
 
 import java.util.List;
 
