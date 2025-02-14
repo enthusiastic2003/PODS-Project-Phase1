@@ -1,4 +1,4 @@
-package com.sirjanhansda.pods.model;
+package com.sirjanhansda.pods.user.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

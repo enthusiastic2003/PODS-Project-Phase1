@@ -1,7 +1,7 @@
-package com.sirjanhansda.pods.userdb;
+package com.sirjanhansda.pods.user.userdb;
 
 
-import com.sirjanhansda.pods.model.Customer;
+import com.sirjanhansda.pods.user.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

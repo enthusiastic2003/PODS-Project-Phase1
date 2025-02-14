@@ -1,7 +1,7 @@
-package com.sirjanhansda.pods.controller;
+package com.sirjanhansda.pods.user.controller;
 
-import com.sirjanhansda.pods.model.Customer;
-import com.sirjanhansda.pods.userdb.UserDb;
+import com.sirjanhansda.pods.user.model.Customer;
+import com.sirjanhansda.pods.user.userdb.UserDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
