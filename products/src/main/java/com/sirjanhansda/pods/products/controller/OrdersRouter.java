@@ -1,10 +1,9 @@
 package com.sirjanhansda.pods.products.controller;
 
-import com.sirjanhansda.pods.products.model.Customer;
-import com.sirjanhansda.pods.products.model.Product;
-import com.sirjanhansda.pods.products.model.UsrWallet;
+import com.sirjanhansda.pods.products.model.*;
 import com.sirjanhansda.pods.products.orderdb.OrdersDb;
 import com.sirjanhansda.pods.products.proddb.ProdDb;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,22 +65,86 @@ public class OrdersRouter {
         // Debit the amount from wallet
         boolean debitSuccess = debitAmountFromWallet(userId, totalCost);
         if (!debitSuccess) {
-            return ResponseEntity.internalServerError().body("Failed to process payment");
+            return ResponseEntity.badRequest().body("Failed to process payment");
         }
 
         // Reduce stock quantity
         boolean stockUpdated = updateStockLevels(prodPOSTRequest);
         if (!stockUpdated) {
-            return ResponseEntity.internalServerError().body("Failed to update stock levels");
+            return ResponseEntity.badRequest().body("Failed to update stock levels");
         }
 
         boolean discountUpdated = updateDiscountStatus(prodPOSTRequest, Objects.requireNonNull(customerResponse.getBody()));
 
+
         if (!discountUpdated) {
-            return ResponseEntity.internalServerError().body("Failed to update discount status");
+            return ResponseEntity.badRequest().body("Failed to update discount status");
         }
-        return ResponseEntity.ok().body("Order placed successfully");
+
+        Orders ord = createOrder(prodPOSTRequest, userId, totalCost);
+
+
+
+
+        return ResponseEntity.ok().body(ord);
     }
+
+
+    @GetMapping("/{orderid}")
+    public ResponseEntity<?> getOrders(@PathVariable Integer orderid) {
+
+        List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderid);
+
+        if (ordersWithId.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(ordersWithId.get(0));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<?> getOrdersByUserId(@PathVariable Integer userId) {
+
+        List<Orders> ordersWithId = ordersDb.findOrdersByUser_id(userId);
+        if (ordersWithId.isEmpty()) {
+            return ResponseEntity.ok().body(new ArrayList<>());
+        }
+        return ResponseEntity.ok().body(ordersWithId.get(0));
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<?> setOrderStatus(@PathVariable Integer orderId, @RequestBody OrderPUTStatus orderPUTStatus) {
+
+        Integer orderIdReq = orderPUTStatus.getOrder_id();
+
+        if(!Objects.equals(orderIdReq, orderId)) {
+            return ResponseEntity.badRequest().body("Requested order id is not equal to requested order id");
+        }
+
+        List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderId);
+        if (ordersWithId.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Orders order = ordersWithId.get(0);
+
+        if(order.getStatus() != OrderStatus.PLACED) {
+            return ResponseEntity.badRequest().body("Order is not placed");
+        }
+
+        order.setStatus(orderPUTStatus.getStatus());
+
+        ordersDb.save(order);
+
+        return ResponseEntity.ok().build();
+
+
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getAllOrders() {
+        return ResponseEntity.ok().body(ordersDb.findAll());
+    }
+
 
     private ResponseEntity<Customer> getCustomerDetails(Integer userId) {
         try {
@@ -178,5 +242,32 @@ public class OrdersRouter {
 
         return true;
 
+    }
+
+    @Transactional
+    public Orders createOrder(ProdPOSTRequest prodPOSTRequest, Integer userId, double totalCost) {
+        Orders order = new Orders();
+        order.setUser_id(userId);
+        order.setStatus(OrderStatus.PLACED);
+        order.setTotal_price((int) totalCost);
+
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for(ItemFormat orderItem: prodPOSTRequest.getItems()){
+
+            OrderItem orderItem1 = new OrderItem();
+            orderItem1.setQuantity(orderItem.getQuantity());
+            orderItem1.setProduct_id(orderItem.getProduct_id());
+            orderItem1.setOrder(order);  // 👈 Important: Link item to order
+            orderItems.add(orderItem1);
+
+
+        }
+
+        order.setItems(orderItems);
+
+        ordersDb.save(order);
+
+        return order;
     }
 }

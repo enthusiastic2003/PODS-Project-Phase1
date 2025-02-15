@@ -1,4 +1,5 @@
 package com.sirjanhansda.pods.products.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,8 +10,9 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orders_id")
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Orders order;
 
     private Integer product_id;
