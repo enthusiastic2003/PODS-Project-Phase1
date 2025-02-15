@@ -48,13 +48,17 @@ public class UserRouter {
     }
 
     @PutMapping("/{usrid}")
-    public ResponseEntity<?> updateUserDiscountStatus(@RequestBody final Integer usrid, @PathVariable final Boolean discountStatus) {
+    public ResponseEntity<?> updateUserDiscountStatus(@PathVariable final Integer usrid, @RequestBody final Boolean discountStatus) {
         List<Customer> customerLists = userDb.findCustomerById(usrid);
+
+        
+
         if (customerLists.isEmpty()) {
             return ResponseEntity.notFound().build();
 
         }
         else {
+            System.out.println(discountStatus);
             Customer customer = customerLists.get(0);
             customer.setDiscount_availed(discountStatus);
             try {

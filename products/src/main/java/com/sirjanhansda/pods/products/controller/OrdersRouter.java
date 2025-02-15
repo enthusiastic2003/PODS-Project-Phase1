@@ -13,6 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/orders")
@@ -73,6 +74,11 @@ public class OrdersRouter {
             return ResponseEntity.internalServerError().body("Failed to update stock levels");
         }
 
+        boolean discountUpdated = updateDiscountStatus(prodPOSTRequest, Objects.requireNonNull(customerResponse.getBody()));
+
+        if (!discountUpdated) {
+            return ResponseEntity.internalServerError().body("Failed to update discount status");
+        }
         return ResponseEntity.ok().body("Order placed successfully");
     }
 
@@ -148,5 +154,29 @@ public class OrdersRouter {
             prodDb.save(product);
         }
         return true;
+    }
+
+    private boolean updateDiscountStatus(ProdPOSTRequest prodPOSTRequest, Customer customer) {
+        Integer userId = prodPOSTRequest.getUser_id();
+
+        if (!customer.getDiscount_availed()) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Boolean> requestEntity = new HttpEntity<>(true, headers);
+
+            ResponseEntity<?> updateDiscount;
+            try{
+                restTemplate.put(accountServiceUrl + "/users/" + userId, requestEntity);
+            }
+            catch (HttpClientErrorException.NotFound e) {
+                System.out.println(e.getMessage());
+                return false;
+            }
+
+
+        }
+
+        return true;
+
     }
 }
