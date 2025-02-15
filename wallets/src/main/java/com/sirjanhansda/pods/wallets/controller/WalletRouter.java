@@ -23,6 +23,7 @@ public class WalletRouter {
         List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUserid(usrid);
 
         if (usrWalletList.isEmpty()) {
+            System.out.println("Bruh. Not found.");
             return ResponseEntity.notFound().build();
         }
         else {
