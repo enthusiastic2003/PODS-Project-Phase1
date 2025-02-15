@@ -12,7 +12,7 @@ public class StartUpTasks {
 
     @PostConstruct
     public void init() {
-        Boolean transactionStatus = csvProdReader.loadProductsFromCsv("products.csv");
+        Boolean transactionStatus = csvProdReader.loadProductsFromCsv("/products.csv");
 
         if(!transactionStatus) {
             System.out.println("No products were found in CSV/ Read Error");

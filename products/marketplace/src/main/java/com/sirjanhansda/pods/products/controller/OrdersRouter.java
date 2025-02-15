@@ -10,6 +10,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +88,7 @@ public class OrdersRouter {
 
 
 
-        return ResponseEntity.ok().body(ord);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ord);
     }
 
 

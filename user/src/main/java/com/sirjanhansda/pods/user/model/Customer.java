@@ -15,7 +15,6 @@ import lombok.Setter;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private Integer id;
 
     private String name;

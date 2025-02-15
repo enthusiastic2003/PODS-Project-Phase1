@@ -14,7 +14,7 @@ import lombok.Setter;
 public class UsrWallet {
 
     @Id
-    private Integer userid;
+    private Integer user_id;
 
     private Integer balance;
 

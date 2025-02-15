@@ -34,7 +34,7 @@ public class ProdRouter {
             return ResponseEntity.notFound().build();
         }
         else {
-            return ResponseEntity.ok(ProdByProdId);
+            return ResponseEntity.ok(ProdByProdId.get(0));
         }
     }
 

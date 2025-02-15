@@ -3,13 +3,14 @@ package com.sirjanhansda.pods.user.controller;
 import com.sirjanhansda.pods.user.model.Customer;
 import com.sirjanhansda.pods.user.userdb.UserDb;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")  // Base URL for all endpoints in this controller
+@RequestMapping("/users")
 public class UserRouter {
 
     @Autowired
@@ -26,9 +27,11 @@ public class UserRouter {
 
         if(existingCustomer.isEmpty()) {
             Customer savedCustomer = userDb.save(customer);
-            return ResponseEntity.ok(savedCustomer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
+
         }
         else {
+
             return ResponseEntity.notFound().build();
         }
     }
@@ -93,6 +96,7 @@ public class UserRouter {
         }
     }
 
+    @DeleteMapping
     public ResponseEntity<?> deleteAllUsers() {
         try {
             userDb.deleteAll();

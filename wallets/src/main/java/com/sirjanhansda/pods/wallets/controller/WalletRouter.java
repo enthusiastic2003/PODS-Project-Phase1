@@ -20,10 +20,9 @@ public class WalletRouter {
     @GetMapping("/{usrid}")
     public ResponseEntity<?> getWallet(@PathVariable Integer usrid) {
 
-        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUserid(usrid);
+        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUser_id(usrid);
 
         if (usrWalletList.isEmpty()) {
-            System.out.println("Bruh. Not found.");
             return ResponseEntity.notFound().build();
         }
         else {
@@ -34,13 +33,13 @@ public class WalletRouter {
     @PutMapping("/{usrid}")
     public ResponseEntity<?> updateWallet(@PathVariable Integer usrid, @RequestBody WalletPUTRequest walletPUTRequest) {
 
-        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUserid(usrid);
+        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUser_id(usrid);
 
         UsrWallet newUsrWallet;
         if (usrWalletList.isEmpty()) {
 
             newUsrWallet = new UsrWallet();
-            newUsrWallet.setUserid(usrid);
+            newUsrWallet.setUser_id(usrid);
             newUsrWallet.setBalance(0);
 
         }
@@ -75,7 +74,7 @@ public class WalletRouter {
     @DeleteMapping("/{usrid}")
     public ResponseEntity<?> deleteWallet(@PathVariable Integer usrid) {
 
-        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUserid(usrid);
+        List<UsrWallet> usrWalletList = walletDb.findUsrWalletByUser_id(usrid);
         if (usrWalletList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
