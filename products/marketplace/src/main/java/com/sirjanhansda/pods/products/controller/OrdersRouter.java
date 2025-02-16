@@ -42,7 +42,8 @@ public class OrdersRouter {
         // Fetch user details
         ResponseEntity<Customer> customerResponse = getCustomerDetails(userId);
         if (!customerResponse.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.badRequest().body("User not found");
+            System.out.println("Cannot get user");
+            return ResponseEntity.badRequest().body(customerResponse);
         }
 
         // Calculate total order cost
@@ -54,7 +55,7 @@ public class OrdersRouter {
         // Fetch user wallet details
         ResponseEntity<UsrWallet> walletResponse = getWalletDetails(userId);
         if (!walletResponse.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.badRequest().body("User wallet not found");
+            return ResponseEntity.badRequest().body(walletResponse);
         }
 
         UsrWallet usrWallet = walletResponse.getBody();
@@ -149,8 +150,17 @@ public class OrdersRouter {
 
 
     private ResponseEntity<Customer> getCustomerDetails(Integer userId) {
+
         try {
-            return restTemplate.getForEntity(accountServiceUrl + "/users/" + userId, Customer.class);
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+
+            return restTemplate.exchange(
+                    accountServiceUrl + "/users/" + userId,
+                    HttpMethod.GET,
+                    requestEntity,
+                    Customer.class
+            );
         } catch (HttpClientErrorException.NotFound e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
