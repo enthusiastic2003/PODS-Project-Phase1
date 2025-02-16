@@ -119,11 +119,38 @@ public class OrdersRouter {
 
         Integer orderIdReq = orderPUTStatus.getOrder_id();
 
+        if(orderPUTStatus.getStatus()!=OrderStatus.DELIVERED){
+            return ResponseEntity.badRequest().body("Order not delivered");
+        }
+
         if(!Objects.equals(orderIdReq, orderId)) {
             return ResponseEntity.badRequest().body("Requested order id is not equal to requested order id");
         }
 
         List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderId);
+        if (ordersWithId.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Orders order = ordersWithId.get(0);
+
+        if(order.getStatus() != OrderStatus.PLACED) {
+            return ResponseEntity.badRequest().body("Order is not placed");
+        }
+
+        order.setStatus(OrderStatus.DELIVERED);
+
+        ordersDb.save(order);
+
+        return ResponseEntity.ok().build();
+
+
+    }
+
+    @DeleteMapping("/{orderid}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Integer orderid) {
+
+        List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderid);
         if (ordersWithId.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -134,12 +161,22 @@ public class OrdersRouter {
             return ResponseEntity.badRequest().body("Order is not placed");
         }
 
-        order.setStatus(orderPUTStatus.getStatus());
+        order.setStatus(OrderStatus.CANCELLED);
 
+        Integer returnMoney = order.getTotal_price();
+        List<OrderItem> returnItems = order.getItems();
+        Integer returnUserId = order.getUser_id();
         ordersDb.save(order);
 
-        return ResponseEntity.ok().build();
+        boolean balrestoreSuccess = restoreBalance(returnUserId, returnMoney);
 
+        if (!balrestoreSuccess) {
+            return ResponseEntity.badRequest().body("Failed to restore balance");
+        }
+
+        restoreStock(returnItems);
+
+        return ResponseEntity.ok().build();
 
     }
 
@@ -148,6 +185,48 @@ public class OrdersRouter {
         return ResponseEntity.ok().body(ordersDb.findAll());
     }
 
+
+    private boolean restoreBalance(Integer userid, Integer price){
+
+
+        WalletPUTRequest walletPutRequest = new WalletPUTRequest();
+        walletPutRequest.setAmount(price);
+        walletPutRequest.setAction(WalletPUTRequest.Action.credit);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(walletServiceUrl + "/wallets/" + userid, HttpMethod.PUT, new HttpEntity<>(walletPutRequest), String.class);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+        return response.getStatusCode() == HttpStatus.OK;
+
+
+
+    }
+
+    private void restoreStock(List<OrderItem> restoreItems) {
+
+        for (OrderItem restoreItem : restoreItems) {
+
+            Integer quantity = restoreItem.getQuantity();
+            Integer prodId = restoreItem.getProduct_id();
+
+            List<Product> products =  prodDb.findProductById(prodId);
+
+
+            Product product = products.get(0);
+
+            product.setStock_quantity(product.getStock_quantity()+quantity);
+
+            prodDb.save(product);
+
+        }
+
+    }
 
     private ResponseEntity<Customer> getCustomerDetails(Integer userId) {
 
