@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y maven
 RUN mvn package
 
 # Define the entry point for the application
-ENTRYPOINT ["java", "-jar", "/wallet-service/target/user-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/wallet-service/target/wallets-0.0.1-SNAPSHOT.jar"]
