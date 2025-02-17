@@ -53,6 +53,8 @@ public class MarketPlaceRouter {
 
         List<OrderItem>  orderItems =new ArrayList<>();
 
+        boolean foundPlaced = false;
+
         Integer totalRefundablePrice = 0;
         for (Orders order : ordersWithUserId) {
             if(order.getStatus().equals(OrderStatus.PLACED)) {
@@ -60,6 +62,7 @@ public class MarketPlaceRouter {
                 ordersDb.save(order);
                 totalRefundablePrice+= order.getTotal_price();
                 orderItems.addAll(order.getItems());
+                foundPlaced = true;
             }
 
 
@@ -74,11 +77,13 @@ public class MarketPlaceRouter {
             System.out.println("Restore failed");
         }
 
-        restoreStock(orderItems);
-
-
-
-        return ResponseEntity.ok().build();
+        if (foundPlaced) {
+            restoreStock(orderItems);
+            return ResponseEntity.ok().build();
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping()

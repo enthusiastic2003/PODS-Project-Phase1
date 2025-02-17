@@ -124,10 +124,14 @@ public class UserRouter {
         } else {
             Customer customer = customerLists.get(0);
 
+            System.out.println(marketplaceAddress  +"/users/"+  usrid);
+            System.out.println(walletAddress +"/"+  usrid);
+
             // Attempt to delete associated marketplace and wallet data
             try {
-                restTemplate.delete(marketplaceAddress + "/" + customer.getId());
-                restTemplate.delete(walletAddress + "/" + customer.getId());
+                restTemplate.delete(marketplaceAddress +"/users/"+  usrid);
+
+                restTemplate.delete(walletAddress + "/"+usrid);
             } catch (Exception e) {
                 System.out.println("[WARN] Failed to delete customer wallet or orders]");
             }
@@ -155,14 +159,17 @@ public class UserRouter {
             List<Customer> allCustomers = userDb.findAll();
 
             // Attempt to delete associated data for each customer
-            for (Customer customer : allCustomers) {
-                try {
-                    restTemplate.delete(marketplaceAddress + "/" + customer.getId());
-                    restTemplate.delete(walletAddress + "/" + customer.getId());
-                } catch (Exception e) {
-                    System.out.println("[WARN] Failed to delete customer wallet or orders]: " + e.getMessage());
-                }
-            }
+//            for (Customer customer : allCustomers) {
+//                try {
+//                    restTemplate.delete(marketplaceAddress+"/"+customer.getId());
+//                    restTemplate.delete(walletAddress+"/"+customer.getId());
+//                } catch (Exception e) {
+//                    System.out.println("[WARN] Failed to delete customer wallet or orders]: " + e.getMessage());
+//                }
+//            }
+
+            restTemplate.delete(marketplaceAddress);
+            restTemplate.delete(walletAddress);
 
             // Delete all users from database
             userDb.deleteAll();

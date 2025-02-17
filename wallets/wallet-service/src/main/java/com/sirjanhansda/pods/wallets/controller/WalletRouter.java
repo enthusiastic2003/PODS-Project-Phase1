@@ -95,7 +95,7 @@ public class WalletRouter {
      *
      * @return ResponseEntity indicating success or failure
      */
-    @DeleteMapping("/")
+    @DeleteMapping()
     public ResponseEntity<?> deleteAllWallets() {
         try {
             walletDb.deleteAll();

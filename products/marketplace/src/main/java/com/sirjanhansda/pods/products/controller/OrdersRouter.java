@@ -46,6 +46,15 @@ public class OrdersRouter {
             return ResponseEntity.badRequest().body(customerResponse);
         }
 
+        // Test for quantity
+        for(ItemFormat item: prodPOSTRequest.getItems()){
+
+            if(item.getQuantity()<=0){
+                return ResponseEntity.badRequest().body("Quantity should be greater than 0");
+            }
+
+        }
+
         // Calculate total order cost
         double totalCost = calculateTotalCost(prodPOSTRequest, customerResponse.getBody());
         if (totalCost < 0) {
