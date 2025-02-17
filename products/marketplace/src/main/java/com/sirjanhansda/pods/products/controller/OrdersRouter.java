@@ -96,22 +96,19 @@ public class OrdersRouter {
     @GetMapping("/{orderid}")
     public ResponseEntity<?> getOrders(@PathVariable Integer orderid) {
 
-        List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderid);
+        List<Orders> ordersWithOrderId = ordersDb.findOrdersByOrder_id(orderid);
 
-        if (ordersWithId.isEmpty()) {
+        if (ordersWithOrderId.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(ordersWithId.get(0));
+        return ResponseEntity.ok().body(ordersWithOrderId.get(0));
     }
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<?> getOrdersByUserId(@PathVariable Integer userId) {
 
-        List<Orders> ordersWithId = ordersDb.findOrdersByUser_id(userId);
-        if (ordersWithId.isEmpty()) {
-            return ResponseEntity.ok().body(new ArrayList<>());
-        }
-        return ResponseEntity.ok().body(ordersWithId.get(0));
+        List<Orders> ordersWithUserId = ordersDb.findOrdersByUser_id(userId);
+        return ResponseEntity.ok().body(ordersWithUserId);
     }
 
     @PutMapping("/{orderId}")
@@ -129,7 +126,7 @@ public class OrdersRouter {
 
         List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderId);
         if (ordersWithId.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Order not found");
         }
 
         Orders order = ordersWithId.get(0);
@@ -152,7 +149,7 @@ public class OrdersRouter {
 
         List<Orders> ordersWithId = ordersDb.findOrdersByOrder_id(orderid);
         if (ordersWithId.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body("Order not found");
         }
 
         Orders order = ordersWithId.get(0);
