@@ -6,11 +6,8 @@ COPY . /marketplace/
 # Copy the products.csv file into the container (if needed)
 COPY ./products.csv /
 
-# Install Maven
-RUN apt-get update && apt-get install -y maven
-
 # Build the project using Maven
-RUN cd /marketplace && mvn package
+RUN cd /marketplace && ./mvnw package
 
 # Define the entry point for the application
 ENTRYPOINT ["java", "-jar", "/marketplace/target/products-0.0.1-SNAPSHOT.jar"]
