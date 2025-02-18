@@ -131,9 +131,17 @@ public class UserRouter {
             try {
                 restTemplate.delete(marketplaceAddress +"/users/"+  usrid);
 
-                restTemplate.delete(walletAddress + "/"+usrid);
+                
             } catch (Exception e) {
-                System.out.println("[WARN] Failed to delete customer wallet or orders]");
+                System.out.println("[WARN] Failed to delete  orders]");
+            }
+
+            try{
+                restTemplate.delete(walletAddress + "/"+usrid);
+            }
+            catch (Exception e)
+            {
+                System.out.println("[WARN] Failed to delete customer wallet");
             }
 
             // Delete user from database
