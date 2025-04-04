@@ -87,9 +87,8 @@ public class UserRouter {
      */
     @PutMapping("/{usrid}")
     public ResponseEntity<?> updateUserDiscountStatus(
-            @PathVariable final Integer usrid,
-            @RequestBody final Boolean discountStatus) {
-
+            @PathVariable final Integer usrid){
+        
         List<Customer> customerLists = userDb.findCustomerById(usrid);
 
         if (customerLists.isEmpty()) {
@@ -97,7 +96,7 @@ public class UserRouter {
         } else {
             System.out.println(discountStatus);
             Customer customer = customerLists.get(0);
-            customer.setDiscount_availed(discountStatus);
+            customer.setDiscount_availed(true);
 
             try {
                 userDb.save(customer);
